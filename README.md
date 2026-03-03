@@ -1,5 +1,4 @@
-Computational modeling of retinal ganglion cell (RGC) spike trains using Generalized Linear Models (GLMs).  
-Analysis of stimulus encoding and spike-history effects to investigate neural response dynamics and temporal precision.
+Computational modeling of retinal ganglion cell (RGC) spike trains using Generalized Linear Models (GLMs).  Analysis of stimulus encoding and spike-history effects to investigate neural response dynamics and temporal precision.
 
 ---
 
