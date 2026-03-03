@@ -76,5 +76,7 @@ The project investigates:
 ## Authors 
 
 Daria Miele
+
 Chiara Pierini
+
 Marta Paniconi
