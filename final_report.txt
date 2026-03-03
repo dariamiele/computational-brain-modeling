@@ -1,0 +1,75 @@
+﻿Modeling Retinal Ganglion Cell Spiking with Generalized Linear Models Including Spike-History Effects
+link: https://colab.research.google.com/drive/1zVGZJW3VCemW_cXMgzzZ0IQra2O_4aKz#scrollTo=eJz-iNBz-3iI
+________________
+Daria Miele - 535702 , Marta Paniconi - 535358, Chiara Pierini - 535407
+BSc in Artificial Intelligence, University of Pavia
+Course: Brain Modelling
+________________
+
+
+1. Introduction
+Stimulus-based GLMs effectively capture receptive field properties and stimulus-response links, but they assume that spiking activity depends only on the stimulus. This assumption overlooks inherent temporal dependencies in how neurons fire. Specifically, the chance of generating a spike is affected by recent spiking activity due to a period of reduced responsiveness, which creates history-dependent patterns in spike trains. 
+In this project, we extend the laboratory GLM by adding spike-history terms in the firing rate. This change allows the model to consider refractoriness while maintaining the original GLM structure. We analyze the new model by looking at the learned spike-history filter and comparing its predictive performance to the stimulus-only version. 
+From a mathematical viewpoint, spiking activity is described within a Poisson GLM framework. Here, the conditional firing rate relies on a linear predictor that includes both stimulus and spike-history components. We estimate model parameters using maximum likelihood, which lets us capture refractoriness as a history-dependent change in firing probability without making the model overly complex.
+
+
+2. Methods
+Neuronal spiking activity was modeled using Generalized Linear Models (GLMs) within a Poisson framework. This followed the method introduced during the lab sessions. We carried out all analyses on retinal ganglion cell spike trains recorded in response to a time-varying visual stimulus. The data was divided into fixed time bins.
+2.1 Stimulus-based GLM
+To establish a baseline, we modeled the firing rate as an exponential function of a linear projection of the stimulus history. We created a stimulus design matrix by including time-lagged versions of the stimulus before each time bin. Model parameters were estimated by maximizing the Poisson log-likelihood with standard numerical optimization.
+2.2 Spike-history extension
+To account for refractoriness, we extended the baseline GLM by adding spike-history regressors. We built a spike-history design matrix that included the neuron’s past spike counts over a fixed time window before each time bin. We ensured strict causality by excluding the current bin. The firing rate was modeled as a function of both stimulus history and recent spiking activity.
+2.3 Model fitting and evaluation
+Models were fitted using maximum likelihood estimation. Predictive performance was assessed by comparing the stimulus-only and stimulus-plus-history models using goodness-of-fit metrics computed on the dataset.. The learned spike-history filter was analyzed to characterize the temporal structure of refractoriness.
+2.4 Simulation of spike trains
+To further evaluate the effect of spike-history dependence, spike trains were simulated from the fitted GLMs. For the history-dependent model, spikes were generated sequentially, updating the spike-history term at each time step. Simulated spike trains were compared to real data in terms of temporal structure and inter-spike interval statistics.
+
+
+3. Results
+The stimulus-driven GLM gives a basic overview of retinal ganglion cell spiking activity, highlighting the main relationship between stimulus and response. However, it struggles to capture the fine details in the spike train, especially right after spike events. This limitation shows up when we compare model predictions with the actual recorded data. 
+Model performance in the Results section is measured using the coefficient of determination (R²). This value is calculated by comparing the observed spike counts with the model's predicted firing rates on the same dataset. 
+3.1 Effect of spike-history terms
+Adding spike-history regressors improves model performance consistently. The stimulus-plus-history GLM shows higher predictive accuracy than the stimulus-only model. This suggests that recent spiking activity provides useful information for predicting future spikes in addition to the stimulus. The learned spike-history filter shows a strong negative effect at short time lags, followed by a slow return to zero. This pattern matches neuronal refractoriness: right after a spike, the firing probability drops and then gradually increases over time.  
+
+
+Learned spike-history filter showing short-latency suppression of firing probability.
+3.2 Quantitative comparison of models
+Model performance was evaluated by comparing goodness-of-fit metrics between the stimulus-only and stimulus-plus-history GLMs. Across neurons, the inclusion of spike-history terms results in a systematic increase in predictive performance. This improvement confirms that refractoriness is a relevant component of the spiking dynamics captured by the model.
+Additional sensitivity analyses performed in the notebook show that the improvement is robust across different choices of spike-history window length, although the strongest effects are concentrated at short time lags.  
+Comparison of predictive performance for stimulus-only and stimulus-plus-history models.
+
+
+
+
+
+
+
+
+3.3 Spike train simulations
+Spike trains simulated from the stimulus-only GLM display approximately Poisson-like statistics and lack short-term temporal structure, as reflected by the presence of closely spaced spikes in the raster plot. In contrast, simulations from the history-dependent GLM reproduce key features observed in the data, including a reduced probability of very short inter-spike intervals and more regular spike timing.
+This qualitative difference is clearly visible in the raster representation and highlights the functional role of spike-history terms in shaping spike timing, demonstrating that the extended model captures temporal dependencies present in real neuronal activity.
+  
+
+Raster plot comparing simulated spike trains from the stimulus-only GLM and the stimulus-plus-history GLM.
+
+
+4. Discussion
+The results show that adding spike-history dependence to a stimulus-based GLM gives a better and more realistic description of retinal ganglion cell spiking activity. The updated model captures intrinsic temporal structure, especially refractorinessa, which the stimulus alone cannot explain. 
+A key strength of this approach is that it keeps the clarity and simplicity of the GLM framework used in the lab sessions. The spike-history filter has a clear physiological meaning, and the boost in predictive performance is consistent rather than a result of overfitting. However, this approach has its limits. The GLM assumes a Poisson spiking process and models refractoriness as a soft, probabilistic effect instead of a strict refractory period. Additionally, spike-history terms focus only on single-neuron dynamics and do not consider interactions with other neurons or network effects. 
+Overall, this project shows that adding spike-history terms to a standard encoding model is a solid and effective way to improve biological realism. It highlights when and why history-dependent GLMs are essential for modeling neural spike trains.
+
+5. References
+5.1 Paninski, L. (2004).
+Maximum likelihood estimation of cascade point-process neural encoding models.
+Network: Computation in Neural Systems, 15(4), 243–262.
+5.2 Truccolo, W., Eden, U. T., Fellows, M. R., Donoghue, J. P., & Brown, E. N. (2005).
+A point process framework for relating neural spiking activity to spiking history, neural ensemble, and extrinsic covariate effects.
+Journal of Neurophysiology, 93(2), 1074–1089.
+5.3 Dayan, P., & Abbott, L. F. (2001).
+Theoretical Neuroscience: Computational and Mathematical Modeling of Neural Systems.
+MIT Press.
+5.4 Pillow, J. W., Shlens, J., Paninski, L., et al. (2008).
+Spatio-temporal correlations and visual signalling in a complete neuronal population.
+Nature, 454(7207), 995–999.
+5.5 Lecture slides and laboratory material provided during the course.
+Brain Modelling Division, Computational Neuroscience Laboratory, Academic Year 2025/2026.
